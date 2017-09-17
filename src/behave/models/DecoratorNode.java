@@ -94,11 +94,16 @@ public abstract class DecoratorNode implements Node {
         }
     }
 
-    public static class RepeateUntilFailNode extends DecoratorNode {
+    public abstract static class RepeatUntilResultNode extends DecoratorNode {
+        protected abstract Types.Status repeatUntilStatus();
+
         @Override
         public Types.Status tick(ExecutionContext context) {
             Types.Status status = m_child.tick(context);
-            if (status == Types.Status.Failure) {
+            if (status == Types.Status.Running) {
+                return status;
+            }
+            else if (status == repeatUntilStatus()) {
                 return Types.Status.Success;
             }
             else {
@@ -108,5 +113,17 @@ public abstract class DecoratorNode implements Node {
         }
     }
 
+    public static class RepeatUntilFailNode extends RepeatUntilResultNode {
+        @Override
+        protected Types.Status repeatUntilStatus() {
+            return Types.Status.Failure;
+        }
+    }
 
+    public static class RepeatUntilSuccessNode extends RepeatUntilResultNode {
+        @Override
+        protected Types.Status repeatUntilStatus() {
+            return Types.Status.Success;
+        }
+    }
 }
