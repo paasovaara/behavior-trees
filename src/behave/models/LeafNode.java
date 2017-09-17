@@ -2,6 +2,10 @@ package behave.models;
 
 import behave.execution.ExecutionContext;
 
+/**
+ * This is the default LeafNode implementation which does nothing.
+ * Create some actual logic by extending this class and use other nodes to create the tree.
+ */
 public class LeafNode implements Node {
     @Override
     public void initialize(ExecutionContext context) {
