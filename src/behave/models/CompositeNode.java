@@ -1,5 +1,7 @@
 package behave.models;
 
+import behave.execution.ExecutionContext;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,5 +15,11 @@ public abstract class CompositeNode implements Node {
         if (!m_nodes.contains(node)) {
             m_nodes.add(node);
         }
+    }
+
+    @Override
+    public void tick(ExecutionContext context) {
+        //TODO this is not very optimized. we could consider looping only nodes that are active, etc.
+        m_nodes.forEach(node -> node.tick(context));
     }
 }

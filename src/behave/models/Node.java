@@ -1,5 +1,7 @@
 package behave.models;
 
+import behave.execution.ExecutionContext;
+
 public interface Node {
-    //TODO
+    void tick(ExecutionContext context);
 }
