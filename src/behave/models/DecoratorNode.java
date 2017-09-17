@@ -49,7 +49,10 @@ public abstract class DecoratorNode implements Node {
     public static class InfiniteRepeaterNode extends DecoratorNode {
         @Override
         public Types.Status tick(ExecutionContext context) {
-            m_child.tick(context);
+            Types.Status status = m_child.tick(context);
+            if (status != Types.Status.Running) {
+                m_child.initialize(context);
+            }
             return Types.Status.Running;
         }
     }
@@ -84,6 +87,7 @@ public abstract class DecoratorNode implements Node {
                     return status;
                 }
                 else {
+                    m_child.initialize(context);
                     return Types.Status.Running;
                 }
             }
@@ -98,6 +102,7 @@ public abstract class DecoratorNode implements Node {
                 return Types.Status.Success;
             }
             else {
+                m_child.initialize(context);
                 return Types.Status.Running;
             }
         }

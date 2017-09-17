@@ -27,6 +27,7 @@ public class Executor {
         //This tick could come from external source also, such as some event/game-loop
         //TODO create separate classes, TimerExecutor and ExternalExecutor
         m_timer = new Timer();
+        m_root.initialize(m_context);
         m_timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {

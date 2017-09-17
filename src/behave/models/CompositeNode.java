@@ -29,9 +29,18 @@ public abstract class CompositeNode implements Node {
 
     @Override
     public void initialize(ExecutionContext context) {
-        m_nodes.forEach(node -> node.initialize(context));
         m_itr = m_nodes.listIterator();
-        m_currentNode = null;
+        pickNextNode(context);
+    }
+
+    protected void pickNextNode(ExecutionContext context) {
+        if (m_itr.hasNext()) {
+            m_currentNode = m_itr.next();
+            m_currentNode.initialize(context);
+        }
+        else {
+            m_currentNode = null;
+        }
     }
 
     @Override
@@ -40,15 +49,6 @@ public abstract class CompositeNode implements Node {
             Log.warning("CompositeNode has no children!");
             return Types.Status.Success;
         }
-        if (m_currentNode == null && m_itr.hasNext()) {
-            m_currentNode = m_itr.next();
-        }
-        else {
-            Log.error("Something wrong, cannot get the next node!");
-            //TODO throw exception?
-            return Types.Status.Failure;
-        }
-
         return tickCurrentNode(context);
     }
 
@@ -63,7 +63,7 @@ public abstract class CompositeNode implements Node {
         else {
             //status depends if we have more nodes to run
             if (m_itr.hasNext()) {
-                m_currentNode = m_itr.next();
+                pickNextNode(context);
                 return Types.Status.Running;
             }
             else {
