@@ -10,7 +10,7 @@ import java.util.ListIterator;
 /**
  * Composite node can contain multiple children
  */
-public class CompositeNode implements Node {
+public abstract class CompositeNode implements Node {
     List<Node> m_nodes = new LinkedList<>();
     ListIterator<Node> m_itr;
     Node m_currentNode;
@@ -40,7 +40,6 @@ public class CompositeNode implements Node {
             Log.warning("CompositeNode has no children!");
             return Types.Status.Success;
         }
-
         if (m_currentNode == null && m_itr.hasNext()) {
             m_currentNode = m_itr.next();
         }
@@ -50,10 +49,15 @@ public class CompositeNode implements Node {
             return Types.Status.Failure;
         }
 
-        //We'll return success/failure once the last node has finished
+        return tickCurrentNode(context);
+    }
+
+    protected abstract Types.Status tickCurrentNode(ExecutionContext context);
+
+    protected Types.Status defaultTick(ExecutionContext context, Types.Status endCondition) {
         Types.Status status = m_currentNode.tick(context);
-        if (status == Types.Status.Running) {
-            //continue with the same node
+        if (status == Types.Status.Running || status == endCondition) {
+            //We're done
             return status;
         }
         else {
@@ -67,4 +71,21 @@ public class CompositeNode implements Node {
             }
         }
     }
+
+    public static class SequenceNode extends CompositeNode {
+        @Override
+        protected Types.Status tickCurrentNode(ExecutionContext context) {
+            //Will return success if all the nodes success and stop and fail if any of them fails
+            return defaultTick(context, Types.Status.Failure);
+        }
+    }
+
+    public static class SelectorNode extends CompositeNode {
+        @Override
+        protected Types.Status tickCurrentNode(ExecutionContext context) {
+            //Will return success and quit immediately if any of the nodes succeeed
+            return defaultTick(context, Types.Status.Success);
+        }
+    }
+
 }
