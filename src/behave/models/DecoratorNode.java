@@ -2,8 +2,9 @@ package behave.models;
 
 import behave.execution.ExecutionContext;
 
-public abstract class DecoratorNode implements Node {
+public class DecoratorNode implements Node {
     private Node m_child;
+
     public void addChild(Node node) {
         if (m_child == null) {
             m_child = node;
@@ -14,7 +15,12 @@ public abstract class DecoratorNode implements Node {
     }
 
     @Override
-    public void tick(ExecutionContext context) {
-        m_child.tick(context);
+    public void initialize(ExecutionContext context) {
+        m_child.initialize(context);
+    }
+
+    @Override
+    public Types.Status tick(ExecutionContext context) {
+        return m_child.tick(context);
     }
 }
