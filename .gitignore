@@ -1,0 +1,7 @@
+# IntelliJ-specific stuff:
+.idea/
+*.iml
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
