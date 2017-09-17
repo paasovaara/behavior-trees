@@ -1,7 +1,10 @@
 package behave.execution;
 
 import behave.models.Node;
+import behave.models.Types;
+import behave.tools.Log;
 
+import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,8 +31,13 @@ public class Executor {
             @Override
             public void run() {
                 //let's assume timer is deterministic, but TODO measure the step using System.currentTimeInMillis
+                Log.debug("Executor running one Tick");
                 m_context.setLastTimeStep(period);
-                m_root.tick(m_context);
+                Types.Status status = m_root.tick(m_context);
+                if (status != Types.Status.Running) {
+                    Log.info("Root node has finished with status " + status + ". Ending execution.");
+                    stop();
+                }
             }
         }, delay, period);
     }

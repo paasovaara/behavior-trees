@@ -72,18 +72,22 @@ public abstract class CompositeNode implements Node {
         }
     }
 
+    /**
+     * Will return success if all the nodes success and stop and fail if any of them fails
+     */
     public static class SequenceNode extends CompositeNode {
         @Override
         protected Types.Status tickCurrentNode(ExecutionContext context) {
-            //Will return success if all the nodes success and stop and fail if any of them fails
             return defaultTick(context, Types.Status.Failure);
         }
     }
 
+    /**
+     * Will return success and quit immediately if any of the nodes succeeded
+     */
     public static class SelectorNode extends CompositeNode {
         @Override
         protected Types.Status tickCurrentNode(ExecutionContext context) {
-            //Will return success and quit immediately if any of the nodes succeeed
             return defaultTick(context, Types.Status.Success);
         }
     }
