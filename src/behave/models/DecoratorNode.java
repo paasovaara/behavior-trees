@@ -35,14 +35,29 @@ public abstract class DecoratorNode implements Node {
         }
     }
 
-    public static class SucceederNode extends DecoratorNode {
+    public static abstract class FixedEndingNode extends DecoratorNode {
+
+        public abstract Types.Status fixedEnding();
+
         @Override
         public Types.Status tick(ExecutionContext context) {
             Types.Status status = m_child.tick(context);
             if (status == Types.Status.Running) {
                 return Types.Status.Running;
             }
-            else return Types.Status.Success;
+            else return fixedEnding();
+        }
+    }
+
+    public static class SuccessNode extends FixedEndingNode {
+        public Types.Status fixedEnding() {
+            return Types.Status.Success;
+        }
+    }
+
+    public static class FailureNode extends FixedEndingNode {
+        public Types.Status fixedEnding() {
+            return Types.Status.Failure;
         }
     }
 
