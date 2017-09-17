@@ -19,7 +19,11 @@ public class RobotTest {
         //say something
         root.addChild(new RobotNodes.RobotSpeakNode("Hear me out, I'm the mighty Robot!"));
 
-        root.addChild(new RobotNodes.RobotLookForInteraction());
+        //Then keep recognizing persons until we find someone
+        Node repeater = new DecoratorNode.RepeatUntilSuccessNode();
+        repeater.addChild(new RobotNodes.RobotLookForInteraction());
+        root.addChild(repeater);
+
         return root;
     }
 
