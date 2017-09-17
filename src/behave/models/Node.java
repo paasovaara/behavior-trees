@@ -12,10 +12,14 @@ public interface Node {
     /**
      * Called periodically
      * @param context
-     * @return status. Running keeps the ticks coming, other statuses won't
+     * @return status. Running keeps the ticks coming to this node, other statuses will cause a new initialization to occur before ticking again.
      */
     Types.Status tick(ExecutionContext context);
 
+    /**
+     * Add child to this Node. Note that not all node-types are designed to have children.
+     * @param node
+     */
     void addChild(Node node);
 
 }
