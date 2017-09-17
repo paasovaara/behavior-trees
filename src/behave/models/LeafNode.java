@@ -23,7 +23,7 @@ public abstract class LeafNode implements Node {
     public static class SucceedingLeafNode extends LeafNode {
         @Override
         public Types.Status tick(ExecutionContext context) {
-            Log.info("I will always succeed");
+            Log.debug("I will always succeed");
             return Types.Status.Success;
         }
     }
@@ -31,7 +31,7 @@ public abstract class LeafNode implements Node {
     public static class FailingLeafNode extends LeafNode {
         @Override
         public Types.Status tick(ExecutionContext context) {
-            Log.info("I will always fail");
+            Log.debug("I will always fail");
 
             return Types.Status.Failure;
         }
