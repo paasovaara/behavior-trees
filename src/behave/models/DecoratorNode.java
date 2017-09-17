@@ -184,6 +184,12 @@ public abstract class DecoratorNode implements Node {
         }
 
         @Override
+        public void initialize(ExecutionContext context) {
+            super.initialize(context);
+            m_ranOnce = false;
+        }
+
+        @Override
         public Types.Status tick(ExecutionContext context) {
             if (!m_ranOnce) {
                 m_status = m_child.tick(context);
