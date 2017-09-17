@@ -13,16 +13,7 @@ public class ZombieTest {
     }
 
     private Node createTree() {
-        Node root = new DecoratorNode.FiniteRepeaterNode(5);
-
-        Node seq = new CompositeNode.SelectorNode();
-        root.addChild(seq);
-
-        seq.addChild(new LeafNode.FailingLeafNode());
-        seq.addChild(new LeafNode.FailingLeafNode());
-        seq.addChild(new LeafNode.SucceedingLeafNode());
-
-        return root;
+        return new ZombieNodes.HuntFromHouse();
     }
 
     public static void main(String[] args) {
