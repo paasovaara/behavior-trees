@@ -73,8 +73,8 @@ public abstract class DecoratorNode implements Node {
     }
 
     public static class FiniteRepeaterNode extends DecoratorNode {
-        int m_times = 0;
-        int m_counter = 0;
+        protected int m_times = 0;
+        protected int m_counter = 0;
 
         public FiniteRepeaterNode(int times) {
             m_times = times;
@@ -87,7 +87,7 @@ public abstract class DecoratorNode implements Node {
         @Override
         public void initialize(ExecutionContext context) {
             super.initialize(context);
-            m_counter = m_times;
+            m_counter = 0;
         }
 
         @Override
@@ -97,8 +97,8 @@ public abstract class DecoratorNode implements Node {
                 return Types.Status.Running;
             }
             else {
-                m_counter--;
-                if (m_counter == 0) {
+                m_counter++;
+                if (m_counter == m_times) {
                     return status;
                 }
                 else {

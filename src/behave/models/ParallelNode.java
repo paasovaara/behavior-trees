@@ -12,6 +12,9 @@ import java.util.Map;
  * ParallelCompositeNode will tick all it's nodes during ticking. Logically this means they are run "in parallel"
  * even though they are executed in the same thread.
  *
+ * Be careful of using AsyncNode with ParallelNodes since the async task will not be automatically cancelled even
+ * if this node finishes. You will have to handle those cases explicitly.
+ *
  * TODO think if ExecutionContext should somehow pass this info to the nodes. Is it necessary?
  * Can it have side-effects if one wants to use timing based on tick-intervals..?
  *
