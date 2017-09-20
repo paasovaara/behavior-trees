@@ -70,4 +70,61 @@ public abstract class LeafNode implements Node {
         }
     }
 
+    /**
+     * AsyncLeafNode will return Running until the Runnable has been finished.
+     *
+     * TODO implement timeout.
+     */
+    public abstract static class AsyncLeafNode extends LeafNode {
+        protected long m_startTime;
+        protected Thread m_thread;
+        protected Types.Status m_status = Types.Status.Failure;
+
+        @Override
+        public void initialize(ExecutionContext context) {
+            super.initialize(context);
+            if (m_thread != null && m_thread.isAlive()) {
+                Log.warning("AsyncLeafNode is initialised while thread is still running!");
+            }
+            m_thread = null;
+            m_status = Types.Status.Failure;
+        }
+
+        @Override
+        public Types.Status tick(ExecutionContext context) {
+            if (m_thread == null) {
+                m_startTime = System.currentTimeMillis();
+                m_thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            m_status = runBlockingTask();
+                        }
+                        catch (Exception e) {
+                            Log.error("Exception in thread: " + e.getMessage());
+                            e.printStackTrace();
+                            m_status = Types.Status.Failure;
+                        }
+                    }
+                });
+                m_thread.start();
+                m_status = Types.Status.Running;
+            }
+            else if (m_thread.isAlive()) {
+                return Types.Status.Running;
+            }
+            else if (m_status == Types.Status.Running) {
+                Log.error("Blocking task returned running, even though the task is finished");
+                m_status = Types.Status.Failure;
+            }
+            return m_status;
+        }
+
+        /**
+         * This blocking task will be ran inside a thread. return either Success or Failure
+         * @return
+         */
+        protected abstract Types.Status runBlockingTask();
+    }
+
 }
