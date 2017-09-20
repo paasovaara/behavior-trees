@@ -3,9 +3,7 @@ package behave.models;
 import behave.execution.ExecutionContext;
 import behave.tools.Log;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Composite node can contain multiple children
@@ -72,6 +70,18 @@ public abstract class CompositeNode implements Node {
         }
     }
 
+
+    public abstract static class RandomCompositeNode extends CompositeNode {
+        @Override
+        public void initialize(ExecutionContext context) {
+            //Not 100% space efficient since we create a copy of the list, but it's very simple.
+            List<Node> shuffledList = new ArrayList<>(m_nodes);
+            Collections.shuffle(shuffledList);
+            m_itr = shuffledList.listIterator();
+            pickNextNode(context);
+        }
+    }
+
     /**
      * Will return success if all the nodes success and stop and fail if any of them fails
      */
@@ -92,4 +102,10 @@ public abstract class CompositeNode implements Node {
         }
     }
 
+    public static class RandomSelectorNode extends RandomCompositeNode {
+        @Override
+        protected Types.Status tickCurrentNode(ExecutionContext context) {
+            return defaultTick(context, Types.Status.Success);
+        }
+    }
 }
