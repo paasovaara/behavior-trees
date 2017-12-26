@@ -42,6 +42,27 @@ public abstract class CompositeNode implements Node {
     }
 
     @Override
+    public void removeChild(Node node) {
+        if (m_nodes.contains(node)) {
+            if (node == m_currentNode) {
+                m_itr.remove();
+                m_currentNode = null;//cannot select the next without initialization
+            }
+            else {
+                m_nodes.remove(node);
+            }
+        }
+    }
+
+    @Override
+    public void removeChildren() {
+        m_nodes.clear();
+        m_itr = m_nodes.listIterator();
+        m_currentNode = null;
+    }
+
+
+    @Override
     public Types.Status tick(ExecutionContext context) {
         if (m_nodes.isEmpty()) {
             Log.warning("CompositeNode has no children!");

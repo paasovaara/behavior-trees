@@ -22,4 +22,14 @@ public interface Node {
      */
     void addChild(Node node);
 
+    /**
+     * remove child from this Node
+     * @param node
+     */
+    void removeChild(Node node);
+
+    /**
+     * Remove all child Nodes
+     */
+    void removeChildren();
 }

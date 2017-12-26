@@ -18,6 +18,12 @@ public abstract class LeafNode implements Node {
         throw new RuntimeException("Leaf node cannot have children");
     }
 
+    @Override
+    public void removeChild(Node node) {}
+
+    @Override
+    public void removeChildren() {}
+
     /**
      * These two nodes are just for debugging. Always implement your own.
      */

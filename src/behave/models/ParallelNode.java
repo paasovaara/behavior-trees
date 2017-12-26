@@ -46,6 +46,21 @@ public abstract class ParallelNode implements Node {
     }
 
     @Override
+    public void removeChild(Node node) {
+        if (m_nodes.contains(node)) {
+            m_nodes.remove(node);
+            m_statusMap.remove(node);
+        }
+    }
+
+    @Override
+    public void removeChildren() {
+        m_nodes.clear();
+        m_statusMap.clear();
+    }
+
+
+    @Override
     public Types.Status tick(ExecutionContext context) {
         if (m_nodes.isEmpty()) {
             Log.warning("ParallelNode has no children!");

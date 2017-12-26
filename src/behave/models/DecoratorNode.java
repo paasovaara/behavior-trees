@@ -5,6 +5,7 @@ import behave.execution.ExecutionContext;
 public abstract class DecoratorNode implements Node {
     protected Node m_child;
 
+    @Override
     public void addChild(Node node) {
         if (m_child == null) {
             m_child = node;
@@ -12,6 +13,18 @@ public abstract class DecoratorNode implements Node {
         else {
             throw new RuntimeException("DecoratorNode can have only one child");
         }
+    }
+
+    @Override
+    public void removeChild(Node node) {
+        if (m_child == node) {
+            m_child = null;
+        }
+    }
+
+    @Override
+    public void removeChildren() {
+        m_child = null;
     }
 
     @Override
