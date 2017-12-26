@@ -5,10 +5,12 @@ import java.time.format.DateTimeFormatter;
 
 //TODO use some proper logging framework
 public class Log {
+    private static boolean m_logDebug = false;
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss:SSS");
 
     public static void debug(String msg) {
-        print("debug", msg);
+        if (m_logDebug)
+            print("debug", msg);
     }
 
     public static void info(String msg) {
